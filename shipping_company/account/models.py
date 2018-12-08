@@ -178,7 +178,7 @@ def add_employee(stanowisko, PESEL = None, imie = '', nazwisko = ''):
         if isinstance(account, Account):
             Employee(account=account, stanowisko=stanowisko).save()
 
-
+#TODO delete employee should always delete account
 def delete_employee(stanowisko='', PESEL = None, imie = '', nazwisko = ''):
     result = Account.objects
     if PESEL:
@@ -196,7 +196,7 @@ def delete_employee(stanowisko='', PESEL = None, imie = '', nazwisko = ''):
 
     result.delete()
 
-
+#TODO delete this function - it should always account!
 def delete_employee_with_account(stanowisko='', PESEL = None, imie = '', nazwisko = ''):
     result = Account.objects
     if PESEL:
@@ -215,8 +215,6 @@ def delete_employee_with_account(stanowisko='', PESEL = None, imie = '', nazwisk
 
 
 def add_address(miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budynku=None):
-    # if Address.objects.filter(miasto=miasto,):
-    #     return
     address = Address(miasto=miasto,
                       kod_pocztowy=kod_pocztowy,
                       ulica=ulica,
@@ -241,25 +239,52 @@ def delete_address(miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_bu
 
     result.delete()
 
-
-def add_customer(nip=None,PESEL = None, imie = '', nazwisko = ''):
-    result = Account.objects
-
-    if PESEL:
-        result = result.filter(PESEL=PESEL)
-    if imie:
-        result = result.filter(imie=imie)
-    if nazwisko:
-        result = result.filter(nazwisko=nazwisko)
-
-    if not PESEL and not imie and not nazwisko:
-        account = add_account()
+#TODO add all cases of add customer
+def add_customer(nip=None,pesel = None, imie = '', nazwisko = ''):
+    account = add_account(PESEL=pesel,imie=imie,nazwisko=nazwisko)
+    if isinstance(account,Account):
         Customer(account=account, NIP=nip).save()
-    elif result.count() == 1:
-        Customer(account=result[0], NIP=nip).save()
-    elif result.count() > 1:
-        return 'nie wlasciwa ilosc wynikow'
-    else:
-        account = add_account(PESEL,imie,nazwisko)
-        if isinstance(account, Account):
-            Customer(account=account, NIP=nip).save()
+
+
+#TODO add all cases of delete customer
+def delete_customer(pesel=None):
+    result = Customer.objects.values('account_id')
+    result = Account.objects.filter(ID_konta__in=result)
+    result = Account.objects.filter(PESEL=pesel)
+    result.delete()
+#
+# def delete_employee(stanowisko='', PESEL=None, imie='', nazwisko=''):
+#     result = Account.objects
+#     if PESEL:
+#         result = result.filter(PESEL=PESEL)
+#     if imie:
+#         result = result.filter(imie=imie)
+#     if nazwisko:
+#         result = result.filter(nazwisko=nazwisko)
+#
+#     result = result.values('ID_konta')
+#     result = Employee.objects.filter(account_id__in=result)
+#
+#     if stanowisko:
+#         result = result.filter(stanowisko=stanowisko)
+#
+#     result.delete()
+
+    # if PESEL:
+    #     result = result.filter(PESEL=PESEL)
+    # if imie:
+    #     result = result.filter(imie=imie)
+    # if nazwisko:
+    #     result = result.filter(nazwisko=nazwisko)
+    #
+    # if not PESEL and not imie and not nazwisko:
+    #     account = add_account()
+    #     Customer(account=account, NIP=nip).save()
+    # elif result.count() == 1:
+    #     Customer(account=result[0], NIP=nip).save()
+    # elif result.count() > 1:
+    #     return 'nie wlasciwa ilosc wynikow'
+    # else:
+    #     account = add_account(PESEL,imie,nazwisko)
+    #     if isinstance(account, Account):
+    #         Customer(account=account, NIP=nip).save()
