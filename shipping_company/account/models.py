@@ -1,26 +1,5 @@
 from django.db import models
 import datetime
-    # from django.core.exceptions import ValidationError
-    # from django.utils.deconstruct import deconstructible
-
-    # @deconstructible
-    # class validate_range_or_null(object):
-    #     compare = lambda self, a, b, c: a > c or a < b
-    #     clean = lambda self, x: x
-    #     message = ('Ensure this value is between %(limit_min)s and %(limit_max)s (it is %(show_value)s).')
-    #     code = 'limit_value'
-    #
-    #     def __init__(self, limit_min, limit_max):
-    #         self.limit_min = limit_min
-    #         self.limit_max = limit_max
-    #
-    #     def __call__(self, value):
-    #         cleaned = self.clean(value)
-    #         params = {'limit_min': self.limit_min, 'limit_max': self.limit_max, 'show_value': cleaned}
-    #         print("WYWOLANE")
-    #         if value:  # make it optional, remove it to make required, or make required on the model
-    #             if self.compare(cleaned, self.limit_min, self.limit_max):
-    #                 raise ValidationError(self.message, code=self.code, params=params)
 
 
 class Account(models.Model):
@@ -31,7 +10,7 @@ class Account(models.Model):
     data_zalozenia_konta = models.DateField(("Date"), default=datetime.date.today)
 
     def __str__(self):
-        return "ID_konta = " + self.ID_konta.__str__() + \
+        return "ID konta = " + self.ID_konta.__str__() + \
                ", PESEL = " + self.PESEL.__str__() + \
                ", Imie = " + self.imie.__str__() + \
                ", Nazwisko = " + self.nazwisko.__str__() + \
@@ -39,11 +18,11 @@ class Account(models.Model):
 
 
 class Employee(models.Model):
-     account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)
-     stanowisko = models.CharField(max_length=40, blank=True)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)
+    stanowisko = models.CharField(max_length=40, blank=True)
 
-def __str__(self):
-        return "ID_konta = " + self.account_id.__str__() + \
+    def __str__(self):
+        return "ID konta = " + self.account_id.__str__() + \
                ", stanowisko = " + self.stanowisko.__str__()
 
 
@@ -81,7 +60,6 @@ class Driver(models.Model):
     kat_prawa_jazdy = models.CharField(max_length=20, blank=False, null=False,default=0)
     doswiadczenie = models.IntegerField(null=False,default=0)
 
-
     def __str__(self):
         return "ID_kierowcy = " + self.ID_kierowcy.__str__() + \
                "ID_konta = " + self.account.__str__() + \
@@ -93,7 +71,6 @@ class Service(models.Model):
     ID_uslugi = models.AutoField(primary_key = True)
     opis_uslugi = models.CharField(max_length = 100, blank=False, null=False)
     koszt = models.IntegerField(blank=False, null=False)
-
 
     def __str__(self):
         return "ID_uslugi = " + self.ID_uslugi.__str__() + \
@@ -151,25 +128,138 @@ class Drivers_Vehicles(models.Model):
                    "Nr_rej = " + self.Nr_rej.__str__()
 
 
-    def add_account(PESEL = None, imie = '', nazwisko = ''):
-        Account(PESEL=PESEL,imie = imie,nazwisko = nazwisko).save()
+
+
+
+def add_account(PESEL = None, imie = '', nazwisko = ''):
+    if PESEL and Account.objects.filter(PESEL=PESEL):
+        return
+    account = Account(PESEL=PESEL,imie = imie,nazwisko = nazwisko)
+    account.save()
+    return account
 
 
 def delete_account(PESEL = None, imie = '', nazwisko = ''):
+    result = Account.objects.all()
+
     if PESEL:
-        Account.objects.filter(PESEL=PESEL).delete()
-    elif imie:
-        Account.objects.filter(imie=imie).delete()
-    elif nazwisko:
-        Account.objects.filter(nazwisko=nazwisko).delete()
+        result = result.filter(PESEL=PESEL)
+    if imie:
+        result = result.filter(imie=imie)
+    if nazwisko:
+        result = result.filter(nazwisko=nazwisko)
+
+    result.delete()
+
 
 def get_account_id(imie,nazwisko):
     return Account.objects.filter(imie=imie, nazwisko=nazwisko)
 
 
-    # def add_employee(PESEL = None, imie = '', nazwisko = '',)
+def add_employee(stanowisko, PESEL = None, imie = '', nazwisko = ''):
+    result = Account.objects
 
-    # def add_employee(account_id, stanowisko=''):
-    #     Employee(account_id = account_id)
+    if PESEL:
+        result = result.filter(PESEL=PESEL)
+    if imie:
+        result = result.filter(imie=imie)
+    if nazwisko:
+        result = result.filter(nazwisko=nazwisko)
+
+    if not PESEL and not imie and not nazwisko:
+        account = add_account()
+        Employee(account=account, stanowisko=stanowisko).save()
+    elif result.count() == 1:
+        Employee(account=result[0], stanowisko=stanowisko).save()
+    elif result.count() > 1:
+        return 'nie wlasciwa ilosc wynikow'
+    else:
+        account = add_account(PESEL,imie,nazwisko)
+        if isinstance(account, Account):
+            Employee(account=account, stanowisko=stanowisko).save()
 
 
+def delete_employee(stanowisko='', PESEL = None, imie = '', nazwisko = ''):
+    result = Account.objects
+    if PESEL:
+        result = result.filter(PESEL=PESEL)
+    if imie:
+        result = result.filter(imie=imie)
+    if nazwisko:
+        result = result.filter(nazwisko=nazwisko)
+
+    result = result.values('ID_konta')
+    result = Employee.objects.filter(account_id__in=result)
+
+    if stanowisko:
+        result = result.filter(stanowisko=stanowisko)
+
+    result.delete()
+
+
+def delete_employee_with_account(stanowisko='', PESEL = None, imie = '', nazwisko = ''):
+    result = Account.objects
+    if PESEL:
+        result = result.filter(PESEL=PESEL)
+    if imie:
+        result = result.filter(imie=imie)
+    if nazwisko:
+        result = result.filter(nazwisko=nazwisko)
+
+    result = result.values('ID_konta')
+    result = Employee.objects.filter(account_id__in=result)
+
+    if stanowisko:
+        result = result.filter(stanowisko=stanowisko).values('account_id')
+    Account.objects.filter(ID_konta__in=result).delete()
+
+
+def add_address(miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budynku=None):
+    # if Address.objects.filter(miasto=miasto,):
+    #     return
+    address = Address(miasto=miasto,
+                      kod_pocztowy=kod_pocztowy,
+                      ulica=ulica,
+                      nr_lokalu=nr_lokalu,
+                      nr_budynku=nr_budynku)
+    address.save()
+    return address
+
+
+def delete_address(miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budynku=None):
+    result = Address.objects
+    if miasto:
+        result = result.filter(miasto=miasto)
+    if kod_pocztowy:
+        result = result.filter(kod_pocztowy=kod_pocztowy)
+    if ulica:
+        result = result.filter(ulica=ulica)
+    if nr_lokalu:
+        result = result.filter(nr_lokalu=nr_lokalu)
+    if nr_budynku:
+        result = result.filter(nr_budynku=nr_budynku)
+
+    result.delete()
+
+
+def add_customer(nip=None,PESEL = None, imie = '', nazwisko = ''):
+    result = Account.objects
+
+    if PESEL:
+        result = result.filter(PESEL=PESEL)
+    if imie:
+        result = result.filter(imie=imie)
+    if nazwisko:
+        result = result.filter(nazwisko=nazwisko)
+
+    if not PESEL and not imie and not nazwisko:
+        account = add_account()
+        Customer(account=account, NIP=nip).save()
+    elif result.count() == 1:
+        Customer(account=result[0], NIP=nip).save()
+    elif result.count() > 1:
+        return 'nie wlasciwa ilosc wynikow'
+    else:
+        account = add_account(PESEL,imie,nazwisko)
+        if isinstance(account, Account):
+            Customer(account=account, NIP=nip).save()
