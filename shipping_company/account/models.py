@@ -62,9 +62,9 @@ class Driver(models.Model):
 
     def __str__(self):
         return "ID_kierowcy = " + self.ID_kierowcy.__str__() + \
-               "ID_konta = " + self.account.__str__() + \
-                "Kat prawa jazdy " + self.kat_prawa_jazdy.__str__() + \
-                "Dowswiadczenie " + self.doswiadczenie.__str__()
+               " ,ID_konta = " + self.account.__str__() + \
+               " ,Kat prawa jazdy " + self.kat_prawa_jazdy.__str__() + \
+               " ,Dowswiadczenie " + self.doswiadczenie.__str__()
 
 
 class Service(models.Model):
@@ -101,9 +101,10 @@ class Vehicle(models.Model):
 
     def __str__(self):
             return "Nr_rej = " + self.Nr_rej.__str__() + \
-                   "marka = " + self.marka.__str__() + \
-                   "model " + self.model.__str__() + \
-                   "atrybut " + self.atrybut.__str__()
+                   ", marka = " + self.marka.__str__() + \
+                   ", model =  " + self.model.__str__() + \
+                   ", atrybut = " + self.atrybut.__str__()
+
 
 class Timetable(models.Model):
     ID_terminu = models.AutoField(primary_key = True)
@@ -119,13 +120,14 @@ class Timetable(models.Model):
                    "ID_kierowcy " + self.ID_kierowcy.__str__() + \
                     "ID_zamowienia " + self.ID_zamowienia.__str__()
 
+
 class Drivers_Vehicles(models.Model):
-    ID_kierowcy = models.ManyToManyField(Driver)
-    Nr_rej = models.ManyToManyField(Vehicle )
+    kierowca = models.OneToOneField(Driver, on_delete=models.CASCADE, null=True)
+    pojazd = models.OneToOneField(Vehicle, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-            return "ID_kierowcy = " + self.ID_kierowcy.__str__() + \
-                   "Nr_rej = " + self.Nr_rej.__str__()
+            return "kierowca = " + self.kierowca.__str__() + \
+                   "\npojazd = " + self.pojazd.__str__()
 
 
 
@@ -133,7 +135,7 @@ class Drivers_Vehicles(models.Model):
 
 def add_account(PESEL = None, imie = '', nazwisko = ''):
     if PESEL and Account.objects.filter(PESEL=PESEL):
-        return
+        return 'add account failed'
     account = Account(PESEL=PESEL,imie = imie,nazwisko = nazwisko)
     account.save()
     return account
@@ -153,65 +155,31 @@ def delete_account(PESEL = None, imie = '', nazwisko = ''):
 
 
 def get_account_id(imie,nazwisko):
-    return Account.objects.filter(imie=imie, nazwisko=nazwisko)
+    return Account.objects.filter(imie=imie, nazwisko=nazwisko).values("ID_konta")
 
 
-def add_employee(stanowisko, PESEL = None, imie = '', nazwisko = ''):
-    result = Account.objects
+def add_employee(stanowisko, pesel = None, imie = '', nazwisko = ''):
+    account = add_account(PESEL=pesel, imie=imie, nazwisko=nazwisko)
+    if isinstance(account, Account):
+        employee = Employee(account=account, stanowisko=stanowisko)
+        employee.save()
+        return employee
+    return 'add employee failed'
 
-    if PESEL:
-        result = result.filter(PESEL=PESEL)
-    if imie:
-        result = result.filter(imie=imie)
-    if nazwisko:
-        result = result.filter(nazwisko=nazwisko)
 
-    if not PESEL and not imie and not nazwisko:
-        account = add_account()
-        Employee(account=account, stanowisko=stanowisko).save()
-    elif result.count() == 1:
-        Employee(account=result[0], stanowisko=stanowisko).save()
-    elif result.count() > 1:
-        return 'nie wlasciwa ilosc wynikow'
-    else:
-        account = add_account(PESEL,imie,nazwisko)
-        if isinstance(account, Account):
-            Employee(account=account, stanowisko=stanowisko).save()
-
-#TODO delete employee should always delete account
-def delete_employee(stanowisko='', PESEL = None, imie = '', nazwisko = ''):
-    result = Account.objects
-    if PESEL:
-        result = result.filter(PESEL=PESEL)
-    if imie:
-        result = result.filter(imie=imie)
-    if nazwisko:
-        result = result.filter(nazwisko=nazwisko)
-
-    result = result.values('ID_konta')
-    result = Employee.objects.filter(account_id__in=result)
-
+def delete_employee(stanowisko='', pesel = None, imie = '', nazwisko = ''):
+    result = Employee.objects.all()
     if stanowisko:
         result = result.filter(stanowisko=stanowisko)
-
-    result.delete()
-
-#TODO delete this function - it should always account!
-def delete_employee_with_account(stanowisko='', PESEL = None, imie = '', nazwisko = ''):
-    result = Account.objects
-    if PESEL:
-        result = result.filter(PESEL=PESEL)
+    result = result.values('account_id')
+    result = Account.objects.filter(ID_konta__in=result)
+    if pesel:
+        result = result.filter(PESEL=pesel)
     if imie:
         result = result.filter(imie=imie)
     if nazwisko:
         result = result.filter(nazwisko=nazwisko)
-
-    result = result.values('ID_konta')
-    result = Employee.objects.filter(account_id__in=result)
-
-    if stanowisko:
-        result = result.filter(stanowisko=stanowisko).values('account_id')
-    Account.objects.filter(ID_konta__in=result).delete()
+    result.delete()
 
 
 def add_address(miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budynku=None):
@@ -225,7 +193,7 @@ def add_address(miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budyn
 
 
 def delete_address(miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budynku=None):
-    result = Address.objects
+    result = Address.objects.all()
     if miasto:
         result = result.filter(miasto=miasto)
     if kod_pocztowy:
@@ -239,52 +207,116 @@ def delete_address(miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_bu
 
     result.delete()
 
-#TODO add all cases of add customer
-def add_customer(nip=None,pesel = None, imie = '', nazwisko = ''):
+
+def add_customer(nip=None,
+                 pesel = None,
+                 imie = '',
+                 nazwisko = '',
+                 miasto='',
+                 kod_pocztowy=None,
+                 ulica='',
+                 nr_lokalu=None,
+                 nr_budynku=None):
     account = add_account(PESEL=pesel,imie=imie,nazwisko=nazwisko)
     if isinstance(account,Account):
-        Customer(account=account, NIP=nip).save()
+        address = add_address(miasto=miasto,
+                          kod_pocztowy=kod_pocztowy,
+                          ulica=ulica,
+                          nr_lokalu=nr_lokalu,
+                          nr_budynku=nr_budynku)
+        Customer(account=account, address=address, NIP=nip).save()
 
 
-#TODO add all cases of delete customer
-def delete_customer(pesel=None):
-    result = Customer.objects.values('account_id')
+def delete_customer(nip=None, pesel = None, imie = '', nazwisko = ''):
+    result = Customer.objects.all()
+    if nip:
+        result = result.filter(NIP=nip)
+
+    result = result.values('account_id')
     result = Account.objects.filter(ID_konta__in=result)
-    result = Account.objects.filter(PESEL=pesel)
-    result.delete()
-#
-# def delete_employee(stanowisko='', PESEL=None, imie='', nazwisko=''):
-#     result = Account.objects
-#     if PESEL:
-#         result = result.filter(PESEL=PESEL)
-#     if imie:
-#         result = result.filter(imie=imie)
-#     if nazwisko:
-#         result = result.filter(nazwisko=nazwisko)
-#
-#     result = result.values('ID_konta')
-#     result = Employee.objects.filter(account_id__in=result)
-#
-#     if stanowisko:
-#         result = result.filter(stanowisko=stanowisko)
-#
-#     result.delete()
+    if pesel:
+        result = result.filter(PESEL=pesel)
+    if imie:
+        result = result.filter(imie=imie)
+    if nazwisko:
+        result = result.filter(nazwisko=nazwisko)
+    account_for_delete = result
+    result = result.values('ID_konta')
+    result = Customer.objects.filter(account_id__in=result)
+    result = result.values('address_id')
+    address_for_delete = Address.objects.filter(ID_adresu__in=result)
+    address_for_delete.delete()
+    account_for_delete.delete()
 
-    # if PESEL:
-    #     result = result.filter(PESEL=PESEL)
-    # if imie:
-    #     result = result.filter(imie=imie)
-    # if nazwisko:
-    #     result = result.filter(nazwisko=nazwisko)
-    #
-    # if not PESEL and not imie and not nazwisko:
-    #     account = add_account()
-    #     Customer(account=account, NIP=nip).save()
-    # elif result.count() == 1:
-    #     Customer(account=result[0], NIP=nip).save()
-    # elif result.count() > 1:
-    #     return 'nie wlasciwa ilosc wynikow'
-    # else:
-    #     account = add_account(PESEL,imie,nazwisko)
-    #     if isinstance(account, Account):
-    #         Customer(account=account, NIP=nip).save()
+
+def add_driver(kat_prawa_jazdy, doswiadczenie, pesel = None, imie = '', nazwisko = ''):
+    account = add_account(PESEL=pesel, imie=imie, nazwisko=nazwisko)
+    if isinstance(account, Account):
+        driver = Driver(account=account, kat_prawa_jazdy=kat_prawa_jazdy, doswiadczenie=doswiadczenie)
+        driver.save()
+        return driver
+    return 'add driver failed'
+
+
+def delete_driver(pesel=None, imie='', nazwisko=''):
+    result = Account.objects.all()
+    if pesel:
+        result = result.filter(PESEL=pesel)
+    if imie:
+        result = result.filter(imie=imie)
+    if nazwisko:
+        result = result.filter(nazwisko=nazwisko)
+    result.delete()
+
+
+def add_vehicle(nr_rej, marka='', model='', atrybut=''):
+    vehicle = Vehicle(Nr_rej=nr_rej, marka=marka, model=model, atrybut=atrybut)
+    vehicle.save()
+    return vehicle
+
+
+def delete_vehicle(nr_rej='', marka='', model='', atrybut=''):
+    if nr_rej:
+        Vehicle.objects.filter(Nr_rej=nr_rej).delete()
+        return
+    result = Vehicle.objects.all()
+    if marka:
+        result = result.filter(marka=marka)
+    if model:
+        result = result.filter(model=model)
+    if atrybut:
+        result = result.filter(atrybut=atrybut)
+    result.delete()
+
+
+def add_vehicle_driver(pesel=None, imie='', nazwisko='', nr_rej='', marka='', model=''):
+    result = Account.objects.all()
+    if pesel:
+        result = result.filter(PESEL=pesel)
+    if imie:
+        result = result.filter(imie=imie)
+    if nazwisko:
+        result = result.filter(nazwisko=nazwisko)
+    result = result.values('ID_konta')
+    driver = Driver.objects.filter(account_id__in=result)
+
+    result = Vehicle.objects.all()
+    if nr_rej:
+        result = result.filter(Nr_rej=nr_rej)
+    if marka:
+        result = result.filter(marka=marka)
+    if model:
+        result = result.filter(model=model)
+
+    vehicle = result
+
+    if driver.count() == 1 and vehicle.count() == 1:
+        driver_vehicle = Drivers_Vehicles(kierowca=driver[0], pojazd=vehicle[0])
+        driver_vehicle.save()
+        # driver_vehicle.ID_kierowcy.add(driver[0])
+        # Drivers_Vehicles(ID_kierowcy = driver, Nr_rej.set(vehicle))
+
+
+def delete_vehilce_driver():
+    result = Drivers_Vehicles.objects.all()
+    result.delete()
