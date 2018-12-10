@@ -343,7 +343,7 @@ def delete_timetable(ID_terminu = None,data_pocz=datetime.date.today(),data_kon=
     result.delete()
 
 def add_order(ID_zamowienia = None,ID_konta=None,ID_uslugi=None,ID_adresu_pocz=None,ID_adresu_kon=None):
-    vehicle = Timetable(ID_zamowienia=ID_zamowienia, ID_konta=ID_konta, ID_uslugi=ID_uslugi, ID_adresu_pocz=ID_adresu_pocz,
+    vehicle = OrdersHistory(ID_zamowienia=ID_zamowienia, ID_konta=ID_konta, ID_uslugi=ID_uslugi, ID_adresu_pocz=ID_adresu_pocz,
                         ID_adresu_kon=ID_adresu_kon)
     vehicle.save()
     return vehicle
@@ -360,4 +360,4 @@ def delete_order(ID_zamowienia = None,ID_konta=None,ID_uslugi=None,ID_adresu_poc
         result = result.filter(ID_adresu_pocz=ID_adresu_pocz)
     if ID_adresu_kon:
         result = result.filter(ID_adresu_kon=ID_adresu_kon)
-    result.delete(
+    result.delete()
