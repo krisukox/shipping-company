@@ -320,3 +320,44 @@ def add_vehicle_driver(pesel=None, imie='', nazwisko='', nr_rej='', marka='', mo
 def delete_vehilce_driver():
     result = Drivers_Vehicles.objects.all()
     result.delete()
+
+
+def add_timetable(ID_terminu = None,data_pocz=datetime.date.today(),data_kon=datetime.date.today(),ID_kierowcy=None,ID_zamowienia=None):
+    vehicle = Timetable(ID_terminu=ID_terminu, data_pocz=data_pocz, data_kon=data_kon, ID_kierowcy=ID_kierowcy,
+                        ID_zamowienia=ID_zamowienia)
+    vehicle.save()
+    return vehicle
+
+def delete_timetable(ID_terminu = None,data_pocz=datetime.date.today(),data_kon=datetime.date.today(),ID_kierowcy=None,ID_zamowienia=None):
+    result = Timetable.objects.all()
+    if ID_terminu:
+     result = result.filter(ID_terminu=ID_terminu)
+    if data_pocz:
+        result = result.filter(data_pocz=data_pocz)
+    if data_kon:
+        result = result.filter(data_kon=data_kon)
+    if ID_kierowcy:
+        result = result.filter(ID_kierowcy=ID_kierowcy)
+    if ID_zamowienia:
+        result = result.filter(ID_zamowienia=ID_zamowienia)
+    result.delete()
+
+def add_order(ID_zamowienia = None,ID_konta=None,ID_uslugi=None,ID_adresu_pocz=None,ID_adresu_kon=None):
+    vehicle = Timetable(ID_zamowienia=ID_zamowienia, ID_konta=ID_konta, ID_uslugi=ID_uslugi, ID_adresu_pocz=ID_adresu_pocz,
+                        ID_adresu_kon=ID_adresu_kon)
+    vehicle.save()
+    return vehicle
+
+def delete_order(ID_zamowienia = None,ID_konta=None,ID_uslugi=None,ID_adresu_pocz=None,ID_adresu_kon=None):
+    result = OrdersHistory.objects.all()
+    if ID_zamowienia:
+     result = result.filter(ID_zamowienia=ID_zamowienia)
+    if ID_konta:
+        result = result.filter(ID_konta=ID_konta)
+    if ID_uslugi:
+        result = result.filter(ID_uslugi=ID_uslugi)
+    if ID_adresu_pocz:
+        result = result.filter(ID_adresu_pocz=ID_adresu_pocz)
+    if ID_adresu_kon:
+        result = result.filter(ID_adresu_kon=ID_adresu_kon)
+    result.delete(
