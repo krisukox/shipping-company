@@ -11,17 +11,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
 
-        k1=add_account(PESEL=123)
+
 
 
         print("\n" + "ORDERS -> ")
         self.display(OrdersHistory.objects)
 
-        add_order(ID_zamowienia=123)
+        add_order(PESEL=123,opis_uslugi='12345',miasto='wroclaw',koszt=999)
 
-
-        delete_order(ID_zamowienia=123)
-       
 
 
         print("\n"+"ORDERS -> ")

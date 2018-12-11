@@ -11,14 +11,13 @@ class Command(BaseCommand):
             print(x)
 
     def handle(self, *args, **kwargs):
-        k1 = add_account(PESEL=123)
+
 
         print("\n" + "TIMETABLE -> ")
         self.display(Timetable.objects)
 
-        add_timetable(ID_terminu=123)
 
-        delete_timetable(ID_terminu=123)
+
 
         print("\n" + "TIMETABLE -> ")
         self.display(Timetable.objects)

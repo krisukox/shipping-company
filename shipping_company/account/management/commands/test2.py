@@ -22,7 +22,7 @@ class Command(BaseCommand):
         Vehicle.objects.filter(Nr_rej="DW321").delete();
         OrdersHistory.objects.filter(ID_zamowienia =123).delete();
         Timetable.objects.filter(ID_terminu = 777).delete();
-        Drivers_Vehicles.objects.filter(ID_kierowcy=123).delete();
+        #Drivers_Vehicles.objects.filter(ID_kierowcy=123).delete();
         print("\n" + "Dodanie obiektow reprezentujacych kazda z tabel")
 
         a1=Account(PESEL=12345678901).save()
@@ -40,16 +40,16 @@ class Command(BaseCommand):
         v2=Vehicle(Nr_rej="DW321", marka="BMW").save()
         OrdersHistory(
         ID_zamowienia = 123,
-        ID_konta = Account.objects.get(imie="Krzysztof"),
-        ID_uslugi = Service.objects.get(koszt=999),
-        ID_adresu_pocz = Address.objects.get(ID_adresu =123),
-        ID_adresu_kon = Address.objects.get(ID_adresu=124)).save()
+        account = Account.objects.get(imie="Krzysztof"),
+        service = Service.objects.get(koszt=999),
+        startAddress = Address.objects.get(ID_adresu =123),
+        endAddress = Address.objects.get(ID_adresu=124)).save()
         OrdersHistory(
         ID_zamowienia=125,
-        ID_konta=Account.objects.get(imie="Krzysztof"),
-        ID_uslugi=Service.objects.get(koszt=999),
-        ID_adresu_pocz=Address.objects.get(ID_adresu=123),
-        ID_adresu_kon=Address.objects.get(ID_adresu=124)).save()
+        account=Account.objects.get(imie="Krzysztof"),
+        service=Service.objects.get(koszt=999),
+        startAddress=Address.objects.get(ID_adresu=123),
+        endAddress=Address.objects.get(ID_adresu=124)).save()
         Timetable(
         ID_terminu = 777,
         data_pocz =(datetime.date.today()),
