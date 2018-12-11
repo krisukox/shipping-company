@@ -13,19 +13,24 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
 
-        print("\n" + "TIMETABLE -> ")
+        print("\n" + "TIMETABLE PRZED DODAWANIEM-> ")
         self.display(Timetable.objects)
 
-        add_timetable(imie='Janusz', nazwisko='Siaki', opis_uslugi='Przewoz', koszt=999,
+        add_timetable(imie='Janusz', nazwisko='Siaki', opis_uslugi='Przewoz',
+                      koszt=999,pesel=123, kat_prawa_jazdy='C', doswiadczenie=10,
                       data_pocz=datetime.date.today(), data_kon=datetime.date.today())
-        add_timetable(imie='Janusz2', nazwisko='Siaki', opis_uslugi='Przewoz3', koszt=333,
+        add_timetable(imie='Siemens', nazwisko='Siaki', opis_uslugi='Przewoz',
+                      koszt=999, pesel=456, kat_prawa_jazdy='C', doswiadczenie=10,
                       data_pocz=datetime.date.today(), data_kon=datetime.date.today())
 
-        delete_timetable(imie='Janusz', nazwisko='Taki', opis_uslugi='Przewoz', koszt=999,
-                     data_pocz=datetime.date.today(), data_kon=datetime.date.today())
-        delete_timetable(imie='Janusz2', nazwisko='Siaki', opis_uslugi='Przewoz3', koszt=333,
-                        data_pocz=datetime.date.today(), data_kon=datetime.date.today())
+        print("\n" + "TIMETABLE PO DODAWANIU-> ")
+        self.display(Timetable.objects)
 
+        delete_timetable(imie='Janusz', nazwisko='Taki', opis_uslugi='Przewoz', koszt=999,pesel=123, kat_prawa_jazdy='C', doswiadczenie=10, data_pocz=datetime.date.today(), data_kon=datetime.date.today())
+        delete_timetable(imie='Siemens', nazwisko='Siaki', opis_uslugi='Przewoz', koszt=999, pesel=456, kat_prawa_jazdy='C', doswiadczenie=10, data_pocz=datetime.date.today(), data_kon=datetime.date.today())
+
+        print("\n" + "TIMETABLE PO USUWANIU-> ")
+        self.display(Timetable.objects)
 
 
         self.display(Timetable.objects)

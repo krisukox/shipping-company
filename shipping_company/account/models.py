@@ -10,11 +10,11 @@ class Account(models.Model):
     data_zalozenia_konta = models.DateField(("Date"), default=datetime.date.today)
 
     def __str__(self):
-        return "ID konta = " + self.ID_konta.__str__() + \
-               ", PESEL = " + self.PESEL.__str__() + \
-               ", Imie = " + self.imie.__str__() + \
-               ", Nazwisko = " + self.nazwisko.__str__() + \
-               ", Data zalozenia konta = " + self.data_zalozenia_konta.__str__()
+        return "ID konta = " + self.ID_konta.__str__() + '\n' + \
+               ", PESEL = " + self.PESEL.__str__()+ '\n' + \
+               ", Imie = " + self.imie.__str__() + '\n' + \
+               ", Nazwisko = " + self.nazwisko.__str__() + '\n' + \
+               ", Data zalozenia konta = " + self.data_zalozenia_konta.__str__() + '\n'
 
 
 class Employee(models.Model):
@@ -22,8 +22,8 @@ class Employee(models.Model):
     stanowisko = models.CharField(max_length=40, blank=True)
 
     def __str__(self):
-        return "ID konta = " + self.account_id.__str__() + \
-               ", stanowisko = " + self.stanowisko.__str__()
+        return "ID konta = " + self.account_id.__str__() + '\n' + \
+               ", stanowisko = " + self.stanowisko.__str__() + '\n'
 
 
 class Address(models.Model):
@@ -35,12 +35,12 @@ class Address(models.Model):
     nr_lokalu = models.IntegerField(null=True)
 
     def __str__(self):
-        return "ID_adresu = " + self.ID_adresu.__str__() + \
-               ", Miasto = " + self.miasto.__str__() + \
-               ", kod pocztowy = " + self.kod_pocztowy.__str__() + \
-               ", Ulica = " + self.ulica.__str__() + \
-               ", Numer budynku = " + self.nr_budynku.__str__() + \
-               ", Numer lokalu = " + self.nr_lokalu.__str__()
+        return "ID_adresu = " + self.ID_adresu.__str__() + '\n' + \
+               ", Miasto = " + self.miasto.__str__() + '\n' + \
+               ", kod pocztowy = " + self.kod_pocztowy.__str__() + '\n' + \
+               ", Ulica = " + self.ulica.__str__() + '\n' + \
+               ", Numer budynku = " + self.nr_budynku.__str__() + '\n' + \
+               ", Numer lokalu = " + self.nr_lokalu.__str__() + '\n'
 
 
 class Customer(models.Model):
@@ -49,9 +49,9 @@ class Customer(models.Model):
     NIP = models.IntegerField(blank=True)
 
     def __str__(self):
-        return "ID_konta = " + self.account_id.__str__() + \
-               ", ID_adresu = " + self.address_id.__str__() + \
-               ", NIP = " + self.NIP.__str__()
+        return "ID_konta = " + self.account_id.__str__() + '\n' + \
+               ", ID_adresu = " + self.address_id.__str__() + '\n' + \
+               ", NIP = " + self.NIP.__str__() + '\n'
 
 
 class Driver(models.Model):
@@ -61,10 +61,10 @@ class Driver(models.Model):
     doswiadczenie = models.IntegerField(null=False,default=0)
 
     def __str__(self):
-        return "ID_kierowcy = " + self.ID_kierowcy.__str__() + \
-               " ,ID_konta = " + self.account.__str__() + \
-               " ,Kat prawa jazdy " + self.kat_prawa_jazdy.__str__() + \
-               " ,Dowswiadczenie " + self.doswiadczenie.__str__()
+        return "ID_kierowcy = " + self.ID_kierowcy.__str__() + '\n' + \
+               " ,ID_konta = " + self.account.__str__() + '\n' + \
+               " ,Kat prawa jazdy " + self.kat_prawa_jazdy.__str__() + '\n' + \
+               " ,Dowswiadczenie " + self.doswiadczenie.__str__() + '\n'
 
 
 class Service(models.Model):
@@ -73,24 +73,24 @@ class Service(models.Model):
     koszt = models.IntegerField(blank=False, null=False)
 
     def __str__(self):
-        return "ID_uslugi = " + self.ID_uslugi.__str__() + \
-               "opis_uslugi = " + self.opis_uslugi.__str__() + \
-               "koszt " + self.koszt.__str__()
+        return "ID_uslugi = " + self.ID_uslugi.__str__() + '\n' + \
+               "opis_uslugi = " + self.opis_uslugi.__str__() + '\n' + \
+               "koszt " + self.koszt.__str__() + '\n'
 
 
 class OrdersHistory(models.Model):
     ID_zamowienia = models.AutoField(primary_key = True)
-    account = models.ForeignKey(Account, on_delete = models.SET_NULL, blank=False,null=True)
-    service = models.ForeignKey(Service , on_delete = models.SET_NULL, blank=False, null=True)
-    startAddress = models.ForeignKey(Address , on_delete = models.SET_NULL, related_name="ID_adresu_pocz",blank=False, null=True)
-    endAddress = models.ForeignKey(Address, on_delete = models.SET_NULL,related_name="ID_adresu_kon" ,blank=False, null=True)
+    account = models.OneToOneField(Account, on_delete = models.SET_NULL, blank=False,null=True)
+    service = models.OneToOneField(Service , on_delete = models.SET_NULL, blank=False, null=True)
+    startAddress = models.OneToOneField(Address , on_delete = models.SET_NULL, related_name="startAddress",blank=False, null=True)
+    endAddress = models.OneToOneField(Address, on_delete = models.SET_NULL,related_name="endAddress" ,blank=False, null=True)
 
     def __str__(self):
-        return "ID_zamowienia = " + self.ID_zamowienia.__str__() + \
-               "ID_konta = " + self.account.__str__() + \
-               "Kat ID_uslugi jazdy " + self.service.__str__() + \
-               "ID_adresu_pocz " + self.startAddress.__str__() + \
-               "ID_adresu_kon " + self.endAddress.__str__()
+        return "ID_zamowienia = " + self.ID_zamowienia.__str__() + '\n' + \
+               "ID_konta = " + self.account_id.__str__() +  '\n' + \
+               "ID_uslugi = " + self.service_id.__str__() + '\n' + \
+               "ID_adresu_pocz = " + self.startAddress_id.__str__() + '\n' + \
+               "ID_adresu_kon = " + self.endAddress_id.__str__() + '\n'
 
 
 class Vehicle(models.Model):
@@ -100,10 +100,10 @@ class Vehicle(models.Model):
     atrybut = models.CharField(max_length=40, blank=True, null=True)
 
     def __str__(self):
-            return "Nr_rej = " + self.Nr_rej.__str__() + \
-                   ", marka = " + self.marka.__str__() + \
-                   ", model =  " + self.model.__str__() + \
-                   ", atrybut = " + self.atrybut.__str__()
+            return "Nr_rej = " + self.Nr_rej.__str__() + '\n' + \
+                   ", marka = " + self.marka.__str__() + '\n' + \
+                   ", model =  " + self.model.__str__() + '\n' + \
+                   ", atrybut = " + self.atrybut.__str__() + '\n'
 
 
 class Timetable(models.Model):
@@ -114,11 +114,11 @@ class Timetable(models.Model):
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=False, null=True)
 
     def __str__(self):
-            return "ID_terminu = " + self.ID_terminu.__str__() + \
-                   "data_pocz = " + self.data_pocz.__str__() + \
-                   "data_kon " + self.data_kon.__str__() + \
-                   "ID_kierowcy " + self.driver.__str__() + \
-                    "ID_zamowienia " + self.service.__str__()
+            return "ID_terminu = " + self.ID_terminu.__str__() + '\n' + \
+                   "data_pocz = " + self.data_pocz.__str__() + '\n' + \
+                   "data_kon " + self.data_kon.__str__() + '\n' + \
+                   "ID_kierowcy " + self.driver_id.__str__() + '\n' + \
+                    "ID_zamowienia " + self.service_id.__str__() + '\n'
 
 
 class Drivers_Vehicles(models.Model):
@@ -338,8 +338,8 @@ def delete_vehilce_driver():
 def add_service(ID_uslugi=None,opis_uslugi='',koszt=None):
     service = Service(
         ID_uslugi=ID_uslugi,
-        opis_uslugi=opis_uslugi
-        ,koszt=koszt)
+        opis_uslugi=opis_uslugi,
+        koszt=koszt)
     service.save()
     return service
 
@@ -353,15 +353,17 @@ def delete_service(ID_uslugi=None,opis_uslugi='',koszt=None):
         result = result.filter(koszt=koszt)
     result.delete()
 
-
+def get_service_id(opis_uslugi='',koszt=''):
+    return Account.objects.filter(opis_uslugi=opis_uslugi, koszt=koszt).values("ID_uslugi")
 
 # Metody do Timetable
 
 
 def add_timetable(data_pocz=datetime.date.today(),data_kon=datetime.date.today(),
-                  PESEL=None,imie='',nazwisko='',
+                  pesel=None,imie='',nazwisko='',
+                  kat_prawa_jazdy='C', doswiadczenie=10,
                   opis_uslugi='',koszt=None):
-    driver = add_driver(pesel=None,imie='',nazwisko='', kat_prawa_jazdy='',doswiadczenie='')
+    driver = add_driver(pesel=pesel,imie=imie,nazwisko=nazwisko, kat_prawa_jazdy=kat_prawa_jazdy,doswiadczenie=doswiadczenie)
     service = add_service(opis_uslugi=opis_uslugi,koszt=koszt)
     if isinstance(driver, Driver):
         if isinstance(service, Service):
@@ -371,34 +373,45 @@ def add_timetable(data_pocz=datetime.date.today(),data_kon=datetime.date.today()
     return 'Add timetable failed'
 
 def delete_timetable(data_pocz=datetime.date.today(),data_kon=datetime.date.today(),
-                     PESEL=None,imie='',nazwisko='',
+                     pesel=None, imie='', nazwisko='',
+                     kat_prawa_jazdy='C', doswiadczenie=10,
                      opis_uslugi='', koszt=None):
-    result = Account.objects.all()
-    if PESEL:
-        result = result.filter(PESEL=PESEL)
-    if imie:
-        result = result.filter(imie=imie)
-    if nazwisko:
-        result = result.filter(nazwisko=nazwisko)
-    result = Service.objects.all()
-    if opis_uslugi:
-        result = result.filter(opis_uslugi=opis_uslugi)
-    if koszt:
-        result = result.filter(koszt=koszt)
     result = Timetable.objects.all()
     if data_pocz:
         result = result.filter(data_pocz=data_pocz)
     if data_kon:
         result = result.filter(data_kon=data_kon)
-    result.delete()
+    timetable_for_delete = result
+    result = Timetable.objects.all()
+    result = result.values('service_id')
+    result = Service.objects.filter(ID_uslugi__in=result)
+    if opis_uslugi:
+        result = result.filter(opis_uslugi=opis_uslugi)
+    if koszt:
+        result = result.filter(koszt=koszt)
+    result = Service.objects.all()
+    service_for_delete = result
 
+    result = Timetable.objects.all()
+    result = result.values('driver_id')
+    result = Driver.objects.filter(ID_kierowcy__in=result)
+    if kat_prawa_jazdy:
+        result = result.filter(kat_prawa_jazdy=kat_prawa_jazdy)
+    if doswiadczenie:
+        result = result.filter(doswiadczenie=doswiadczenie)
+    driver_for_delete = result
+
+
+    driver_for_delete.delete()
+    service_for_delete.delete()
+    timetable_for_delete.delete()
 
 # Metody do Order
 
-def add_order(PESEL=None,imie='',nazwisko='',
+def add_order(pesel=None,imie='',nazwisko='',
               opis_uslugi='',koszt=None,
               miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budynku=None):
-    account = add_account(PESEL=PESEL, imie=imie, nazwisko=nazwisko)
+    account = add_account(PESEL=pesel, imie=imie, nazwisko=nazwisko)
     service = add_service(opis_uslugi=opis_uslugi, koszt=koszt)
     address = add_address(miasto=miasto,kod_pocztowy=kod_pocztowy,ulica=ulica,nr_lokalu=nr_lokalu,nr_budynku=nr_budynku)
     if isinstance(account, Account):
@@ -409,27 +422,31 @@ def add_order(PESEL=None,imie='',nazwisko='',
                     return order
     return 'Add order failed'
 
-def delete_order(PESEL=None,imie='',nazwisko='',
+def delete_order(pesel=None, imie='',nazwisko='',
                  opis_uslugi='', koszt=None,
                  miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budynku=None):
-    result = Account.objects.all()
-    result = result.values('ID_konta')
+    result = OrdersHistory.objects.all()
+    result = result.values('account_id')
     result = Account.objects.filter(ID_konta__in=result)
-    if PESEL:
-        result = result.filter(PESEL=PESEL)
+    if pesel:
+        result = result.filter(PESEL=pesel)
     if imie:
         result = result.filter(imie=imie)
     if nazwisko:
         result = result.filter(nazwisko=nazwisko)
-    result = Service.objects.all()
-    result = result.values('ID_uslugi')
+    account_for_delete = result
+
+    result = OrdersHistory.objects.all()
+    result = result.values('service_id')
     result = Service.objects.filter(ID_uslugi__in=result)
     if opis_uslugi:
         result = result.filter(opis_uslugi=opis_uslugi)
     if koszt:
         result = result.filter(koszt=koszt)
-    result = Address.objects.all()
-    result = result.values('ID_adresu')
+    service_for_delete = result
+
+    result = OrdersHistory.objects.all()
+    result = result.values('startAddress_id')
     result = Address.objects.filter(ID_adresu__in=result)
     if miasto:
         result = result.filter(miasto=miasto)
@@ -439,9 +456,46 @@ def delete_order(PESEL=None,imie='',nazwisko='',
         result = result.filter(ulica=ulica)
     if nr_lokalu:
         result = result.filter(nr_lokalu=nr_lokalu)
-    if nr_budynku:
+    if koszt:
         result = result.filter(nr_budynku=nr_budynku)
-    result.delete()
+    address_for_delete = result
+
+    result=OrdersHistory.objects.all()
+    result = result.values('ID_zamowienia')
+    result = OrdersHistory.objects.filter(ID_zamowienia__in=result)
+    order_to_delete = result
+
+    order_to_delete.delete()
+    address_for_delete.delete()
+    service_for_delete.delete()
+    account_for_delete.delete()
 
 
+#def delete_customer(nip=None, pesel = None, imie = '', nazwisko = ''):
+#    result = Customer.objects.all()
+ #   if nip:
+#        result = result.filter(NIP=nip)
 
+#
+ #   result = result.values('account_id')
+  #  result = Account.objects.filter(ID_konta__in=result)
+   # if pesel:
+  #      result = result.filter(PESEL=pesel)
+ #   if imie:
+ #       result = result.filter(imie=imie)
+ #   if nazwisko:
+ #       result = result.filter(nazwisko=nazwisko)
+ #   account_for_delete = result
+ #   result = result.values('ID_konta')
+ #   result = Customer.objects.filter(account_id__in=result)
+#    result = result.values('address_id')
+ #   address_for_delete = Address.objects.filter(ID_adresu__in=result)
+  #  address_for_delete.delete()
+  #  account_for_delete.delete()
+
+#class OrdersHistory(models.Model):
+ #   ID_zamowienia = models.AutoField(primary_key = True)
+  #  account = models.ForeignKey(Account, on_delete = models.SET_NULL, blank=False,null=True)
+   # service = models.ForeignKey(Service , on_delete = models.SET_NULL, blank=False, null=True)
+    #startAddress = models.ForeignKey(Address , on_delete = models.SET_NULL, related_name="ID_adresu_pocz",blank=False, null=True)
+    #endAddress = models.ForeignKey(Address, on_delete = models.SET_NULL,related_name="ID_adresu_kon" ,blank=False, null=True)

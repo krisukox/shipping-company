@@ -14,15 +14,17 @@ class Command(BaseCommand):
 
 
 
-        print("\n" + "ORDERS -> ")
+        print("\n" + "ORDERS PRZED DODAWANIEM-> ")
         self.display(OrdersHistory.objects)
 
-        add_order(imie='Janusz',nazwisko='Taki',opis_uslugi='Przewoz',koszt=999,miasto='Wroclaw',kod_pocztowy='123')
-        add_order(imie='Stefan', nazwisko='Siaki', opis_uslugi='Przewoz', koszt=9929, miasto='Warszawa', kod_pocztowy='567')
+        add_order(pesel = 123,imie='Janusz', nazwisko='Taki',opis_uslugi='Przewoz',        koszt=999,miasto='Wroclaw', kod_pocztowy='123')
+        add_order(pesel = 456,imie='Lukasz', nazwisko='Ja',  opis_uslugi='Przewoz towaru', koszt=100,miasto='Wroclaw', kod_pocztowy='12345')
 
-        delete_order(imie='Stefan', nazwisko='Siaki', opis_uslugi='Przewoz2', koszt=9929, miasto='Warszawa', kod_pocztowy='567')
-        delete_order(imie='Janusz', nazwisko='Taki', opis_uslugi='Przewoz', koszt=999, miasto='Wroclaw',kod_pocztowy='123')
+        print("\n" + "ORDERS PO DODAWANIU-> ")
+        self.display(OrdersHistory.objects)
 
-        print("\n"+"ORDERS -> ")
+        delete_order(pesel = 123,imie='Janusz', nazwisko='Taki',opis_uslugi='Przewoz',koszt=999,miasto='Wroclaw',kod_pocztowy='123')
+        delete_order(pesel=456, imie='Lukasz', nazwisko='Ja', opis_uslugi='Przewoz towaru', koszt=100, miasto='Wroclaw', kod_pocztowy='12345')
+        print("\n"+"ORDERS PO USUWANIU -> ")
         self.display(OrdersHistory.objects)
 

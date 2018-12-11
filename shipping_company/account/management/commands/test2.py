@@ -12,15 +12,21 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         Account.objects.filter(PESEL=12345678901).delete()
         Account.objects.filter(imie="Krzysztof").delete()
+        Account.objects.filter(imie="Stefan").delete()
         Account.objects.filter(imie="Janusz").delete()
         Driver.objects.filter(ID_kierowcy=123).delete();
         Driver.objects.filter(ID_kierowcy=124).delete();
         Address.objects.filter(miasto="Wroclaw").delete();
         Address.objects.filter(miasto="Wroclaw2").delete();
+        Address.objects.filter(miasto="wroclaw").delete();
+
         Service.objects.filter(koszt=999).delete();
         Vehicle.objects.filter(Nr_rej = "DW123").delete();
         Vehicle.objects.filter(Nr_rej="DW321").delete();
-        OrdersHistory.objects.filter(ID_zamowienia =123).delete();
+        OrdersHistory.objects.filter(ID_zamowienia =125).delete();
+        OrdersHistory.objects.filter(ID_zamowienia =140).delete();
+
+
         Timetable.objects.filter(ID_terminu = 777).delete();
         #Drivers_Vehicles.objects.filter(ID_kierowcy=123).delete();
         print("\n" + "Dodanie obiektow reprezentujacych kazda z tabel")
