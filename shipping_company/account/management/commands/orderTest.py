@@ -17,9 +17,11 @@ class Command(BaseCommand):
         print("\n" + "ORDERS -> ")
         self.display(OrdersHistory.objects)
 
-        add_order(PESEL=123,opis_uslugi='12345',miasto='wroclaw',koszt=999)
+        add_order(imie='Janusz',nazwisko='Taki',opis_uslugi='Przewoz',koszt=999,miasto='Wroclaw',kod_pocztowy='123')
+        add_order(imie='Stefan', nazwisko='Siaki', opis_uslugi='Przewoz', koszt=9929, miasto='Warszawa', kod_pocztowy='567')
 
-
+        delete_order(imie='Stefan', nazwisko='Siaki', opis_uslugi='Przewoz2', koszt=9929, miasto='Warszawa', kod_pocztowy='567')
+        delete_order(imie='Janusz', nazwisko='Taki', opis_uslugi='Przewoz', koszt=999, miasto='Wroclaw',kod_pocztowy='123')
 
         print("\n"+"ORDERS -> ")
         self.display(OrdersHistory.objects)

@@ -361,11 +361,11 @@ def delete_service(ID_uslugi=None,opis_uslugi='',koszt=None):
 def add_timetable(data_pocz=datetime.date.today(),data_kon=datetime.date.today(),
                   PESEL=None,imie='',nazwisko='',
                   opis_uslugi='',koszt=None):
-    account = add_account(PESEL=PESEL, imie=imie, nazwisko=nazwisko)
+    driver = add_driver(pesel=None,imie='',nazwisko='', kat_prawa_jazdy='',doswiadczenie='')
     service = add_service(opis_uslugi=opis_uslugi,koszt=koszt)
-    if isinstance(account, Account):
+    if isinstance(driver, Driver):
         if isinstance(service, Service):
-            timetable = Timetable(data_pocz=data_pocz, data_kon=data_kon, account=account,service=service)
+            timetable = Timetable(data_pocz=data_pocz, data_kon=data_kon, driver=driver,service=service)
             timetable.save()
             return timetable
     return 'Add timetable failed'
@@ -413,6 +413,8 @@ def delete_order(PESEL=None,imie='',nazwisko='',
                  opis_uslugi='', koszt=None,
                  miasto='', kod_pocztowy=None, ulica='', nr_lokalu=None, nr_budynku=None):
     result = Account.objects.all()
+    result = result.values('ID_konta')
+    result = Account.objects.filter(ID_konta__in=result)
     if PESEL:
         result = result.filter(PESEL=PESEL)
     if imie:
@@ -420,11 +422,15 @@ def delete_order(PESEL=None,imie='',nazwisko='',
     if nazwisko:
         result = result.filter(nazwisko=nazwisko)
     result = Service.objects.all()
+    result = result.values('ID_uslugi')
+    result = Service.objects.filter(ID_uslugi__in=result)
     if opis_uslugi:
         result = result.filter(opis_uslugi=opis_uslugi)
     if koszt:
         result = result.filter(koszt=koszt)
     result = Address.objects.all()
+    result = result.values('ID_adresu')
+    result = Address.objects.filter(ID_adresu__in=result)
     if miasto:
         result = result.filter(miasto=miasto)
     if kod_pocztowy:
