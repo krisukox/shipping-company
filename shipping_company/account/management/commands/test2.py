@@ -12,17 +12,23 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         Account.objects.filter(PESEL=12345678901).delete()
         Account.objects.filter(imie="Krzysztof").delete()
+        Account.objects.filter(imie="Stefan").delete()
         Account.objects.filter(imie="Janusz").delete()
         Driver.objects.filter(ID_kierowcy=123).delete();
         Driver.objects.filter(ID_kierowcy=124).delete();
         Address.objects.filter(miasto="Wroclaw").delete();
         Address.objects.filter(miasto="Wroclaw2").delete();
+        Address.objects.filter(miasto="wroclaw").delete();
+
         Service.objects.filter(koszt=999).delete();
         Vehicle.objects.filter(Nr_rej = "DW123").delete();
         Vehicle.objects.filter(Nr_rej="DW321").delete();
-        OrdersHistory.objects.filter(ID_zamowienia =123).delete();
+        OrdersHistory.objects.filter(ID_zamowienia =125).delete();
+        OrdersHistory.objects.filter(ID_zamowienia =140).delete();
+
+
         Timetable.objects.filter(ID_terminu = 777).delete();
-        Drivers_Vehicles.objects.filter(ID_kierowcy=123).delete();
+        #Drivers_Vehicles.objects.filter(ID_kierowcy=123).delete();
         print("\n" + "Dodanie obiektow reprezentujacych kazda z tabel")
 
         a1=Account(PESEL=12345678901).save()
@@ -40,16 +46,16 @@ class Command(BaseCommand):
         v2=Vehicle(Nr_rej="DW321", marka="BMW").save()
         OrdersHistory(
         ID_zamowienia = 123,
-        ID_konta = Account.objects.get(imie="Krzysztof"),
-        ID_uslugi = Service.objects.get(koszt=999),
-        ID_adresu_pocz = Address.objects.get(ID_adresu =123),
-        ID_adresu_kon = Address.objects.get(ID_adresu=124)).save()
+        account = Account.objects.get(imie="Krzysztof"),
+        service = Service.objects.get(koszt=999),
+        startAddress = Address.objects.get(ID_adresu =123),
+        endAddress = Address.objects.get(ID_adresu=124)).save()
         OrdersHistory(
         ID_zamowienia=125,
-        ID_konta=Account.objects.get(imie="Krzysztof"),
-        ID_uslugi=Service.objects.get(koszt=999),
-        ID_adresu_pocz=Address.objects.get(ID_adresu=123),
-        ID_adresu_kon=Address.objects.get(ID_adresu=124)).save()
+        account=Account.objects.get(imie="Krzysztof"),
+        service=Service.objects.get(koszt=999),
+        startAddress=Address.objects.get(ID_adresu=123),
+        endAddress=Address.objects.get(ID_adresu=124)).save()
         Timetable(
         ID_terminu = 777,
         data_pocz =(datetime.date.today()),
