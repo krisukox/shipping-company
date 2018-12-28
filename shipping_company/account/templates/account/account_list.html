@@ -3,14 +3,24 @@
 {% block content %}
   <h1>Account List</h1>
   {% if account_list %}
-  <ul>
+<table>
+    <tr>
+    <th>id_konta</th>
+    <th>PESEL</th>
+    <th>imie</th>
+    <th>nazwisko</th>
+    <th>data_zalozenia_konta</th>
+  </tr>
     {% for account in account_list %}
-      <li>
-        <a href="{{ Account.get_absolute_url }}">{{ account.id_konta }}</a> ({{account.PESEL}})
-          {{account.imie}} {{account.nazwisko}} {{account.data_zalozenia_konta}}
-      </li>
+        <tr>
+       <td> {{ account.ID_konta }}</td>
+       <td>{{account.PESEL}}</td>
+       <td>{{account.imie}}</td>
+        <td>{{account.nazwisko}}</td>
+        <td>{{account.data_zalozenia_konta}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no accounts yet.</p>
   {% endif %}       
