@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Vehicle List</h1>
+  {% if vehicle_list %}
+  <ul>
+    {% for vehicle in vehicle_list %}
+      <li>
+        <a href="{{ Vehicle.get_absolute_url }}"></a>
+          {{ vehicle.Nr_rej}}
+          {{ vehicle.marka}}
+          {{ vehicle.model}}
+          {{ vehicle.atrybut}}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no vehicles yet.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1 class="display-3">Database home</h1>
+
+  <p class="text-info">The base has the following record counts:</p>
+  <ul>
+    <li><strong>Accounts:</strong> {{ num_accounts }}</li>
+    <li><strong>Employees:</strong> {{ num_employees }}</li>
+    <li><strong>Address:</strong> {{ num_addresses }}</li>
+    <li><strong>Customer:</strong> {{ num_customers }}</li>
+    <li><strong>Driver:</strong> {{ num_drivers }}</li>
+    <li><strong>Service:</strong> {{ num_services }}</li>
+    <li><strong>OrdersHistory:</strong> {{ num_order }}</li>
+    <li><strong>Timetable:</strong> {{ num_timetables }}</li>
+    <li><strong>Vehicle:</strong> {{ num_vehicles }}</li>
+    <li><strong>Drivers_Vehicles:</strong> {{ num_drivers_vehicles }}</li>
+  </ul>
+{% endblock %}

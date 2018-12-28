@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 import datetime
 
 
@@ -16,6 +17,9 @@ class Account(models.Model):
                ", Nazwisko = " + self.nazwisko.__str__() + '\n' + \
                ", Data zalozenia konta = " + self.data_zalozenia_konta.__str__() + '\n'
 
+    def get_absolute_url(self):
+
+        return reverse('account-detail', args=[str(self.id)])
 
 class Employee(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)
@@ -25,6 +29,8 @@ class Employee(models.Model):
         return "ID konta = " + self.account_id.__str__() + '\n' + \
                ", stanowisko = " + self.stanowisko.__str__() + '\n'
 
+    def get_absolute_url(self):
+        return reverse('employee-detail', args=[str(self.id)])
 
 class Address(models.Model):
     ID_adresu = models.AutoField(primary_key=True)
@@ -42,6 +48,8 @@ class Address(models.Model):
                ", Numer budynku = " + self.nr_budynku.__str__() + '\n' + \
                ", Numer lokalu = " + self.nr_lokalu.__str__() + '\n'
 
+    def get_absolute_url(self):
+        return reverse('address-detail', args=[str(self.id)])
 
 class Customer(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)
@@ -53,6 +61,8 @@ class Customer(models.Model):
                ", ID_adresu = " + self.address_id.__str__() + '\n' + \
                ", NIP = " + self.NIP.__str__() + '\n'
 
+    def get_absolute_url(self):
+        return reverse('customer-detail', args=[str(self.id)])
 
 class Driver(models.Model):
     ID_kierowcy = models.AutoField(primary_key=True)
@@ -66,6 +76,8 @@ class Driver(models.Model):
                " ,Kat prawa jazdy " + self.kat_prawa_jazdy.__str__() + '\n' + \
                " ,Dowswiadczenie " + self.doswiadczenie.__str__() + '\n'
 
+    def get_absolute_url(self):
+        return reverse('driver-detail', args=[str(self.id)])
 
 class Service(models.Model):
     ID_uslugi = models.AutoField(primary_key = True)
@@ -77,6 +89,8 @@ class Service(models.Model):
                "opis_uslugi = " + self.opis_uslugi.__str__() + '\n' + \
                "koszt " + self.koszt.__str__() + '\n'
 
+    def get_absolute_url(self):
+        return reverse('service-detail', args=[str(self.id)])
 
 class OrdersHistory(models.Model):
     ID_zamowienia = models.AutoField(primary_key = True)
@@ -92,6 +106,8 @@ class OrdersHistory(models.Model):
                "ID_adresu_pocz = " + self.startAddress_id.__str__() + '\n' + \
                "ID_adresu_kon = " + self.endAddress_id.__str__() + '\n'
 
+    def get_absolute_url(self):
+        return reverse('ordershistory-detail', args=[str(self.id)])
 
 class Vehicle(models.Model):
     Nr_rej = models.CharField(max_length = 20, primary_key = True)
@@ -105,6 +121,8 @@ class Vehicle(models.Model):
                    ", model =  " + self.model.__str__() + '\n' + \
                    ", atrybut = " + self.atrybut.__str__() + '\n'
 
+    def get_absolute_url(self):
+        return reverse('vehicle-detail', args=[str(self.id)])
 
 class Timetable(models.Model):
     ID_terminu = models.AutoField(primary_key = True)
@@ -120,6 +138,8 @@ class Timetable(models.Model):
                    "ID_kierowcy " + self.driver_id.__str__() + '\n' + \
                     "ID_zamowienia " + self.service_id.__str__() + '\n'
 
+    def get_absolute_url(self):
+        return reverse('timetable-detail', args=[str(self.id)])
 
 class Drivers_Vehicles(models.Model):
     kierowca = models.OneToOneField(Driver, on_delete=models.CASCADE, null=True)
@@ -129,7 +149,8 @@ class Drivers_Vehicles(models.Model):
             return "kierowca = " + self.kierowca.__str__() + \
                    "\npojazd = " + self.pojazd.__str__()
 
-
+    def get_absolute_url(self):
+        return reverse('drivers_vehicles-detail', args=[str(self.id)])
 
 # Metody do account
 

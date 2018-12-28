@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Drivers_Vehicles List</h1>
+  {% if drivers_vehicles_list %}
+  <ul>
+    {% for Drivers_Vehicles in drivers_vehicles_list %}
+      <li>
+        <a href="{{ Drivers_Vehicles.get_absolute_url }}"></a>
+          {{ Drivers_Vehicles.kierowca}}
+          {{ Drivers_Vehicles.pojazd}}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no objects yet.</p>
+  {% endif %}
+{% endblock %}

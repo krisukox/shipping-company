@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Driver List</h1>
+  {% if driver_list %}
+  <ul>
+    {% for driver in driver_list %}
+      <li>
+        <a href="{{ Driver.get_absolute_url }}"></a>
+          {{ Driver.ID_kierowcy}}
+          {{ Driver.account}}
+          {{ Driver.kat_prawa_jazdy}}
+          {{ Driver.doswiadczenie}}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no drivers yet.</p>
+  {% endif %}
+{% endblock %}

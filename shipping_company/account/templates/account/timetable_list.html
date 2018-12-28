@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Timetable List</h1>
+  {% if timetable_list %}
+  <ul>
+    {% for timetable in timetable_list %}
+      <li>
+        <a href="{{ Timetable.get_absolute_url }}"></a>
+          {{ Timetable.ID_terminu}}
+          {{ Timetable.data_pocz}}
+          {{ Timetable.data_kon}}
+          {{ Timetable.driver}}
+          {{ Timetable.service}}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no Timetables yet.</p>
+  {% endif %}
+{% endblock %}

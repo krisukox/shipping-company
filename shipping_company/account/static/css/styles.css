@@ -1,0 +1,8 @@
+.sidebar-nav {
+    padding: 0;
+    padding-bottom: 20px;
+    margin-top: 20px;
+    list-style: none;
+    border-bottom: 2px dashed darkblue;
+    
+}

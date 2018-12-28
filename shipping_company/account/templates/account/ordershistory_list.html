@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Order List</h1>
+  {% if orderhistory_list %}
+  <ul>
+    {% for orderhistory in orderhistory_list %}
+      <li>
+        <a href="{{ OrderHistory.get_absolute_url }}"></a>
+          {{ OrderHistory.ID_zamowienia}}
+          {{ OrderHistory.account}}
+          {{ OrderHistory.service}}
+          {{ OrderHistory.startAddress}}
+          {{ OrderHistory.endAddress}}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no orders yet.</p>
+  {% endif %}
+{% endblock %}
