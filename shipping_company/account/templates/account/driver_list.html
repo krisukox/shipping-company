@@ -7,10 +7,10 @@
     {% for driver in driver_list %}
       <li>
         <a href="{{ Driver.get_absolute_url }}"></a>
-          {{ Driver.ID_kierowcy}}
-          {{ Driver.account}}
-          {{ Driver.kat_prawa_jazdy}}
-          {{ Driver.doswiadczenie}}
+          {{ driver.ID_kierowcy}}
+          {{ driver.account}}
+          {{ driver.kat_prawa_jazdy}}
+          {{ driver.doswiadczenie}}
       </li>
     {% endfor %}
   </ul>

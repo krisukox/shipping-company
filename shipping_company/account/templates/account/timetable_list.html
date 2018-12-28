@@ -7,11 +7,11 @@
     {% for timetable in timetable_list %}
       <li>
         <a href="{{ Timetable.get_absolute_url }}"></a>
-          {{ Timetable.ID_terminu}}
-          {{ Timetable.data_pocz}}
-          {{ Timetable.data_kon}}
-          {{ Timetable.driver}}
-          {{ Timetable.service}}
+          {{ timetable.ID_terminu}}
+          {{ timetable.data_pocz}}
+          {{ timetable.data_kon}}
+          {{ timetable.driver}}
+          {{ timetable.service}}
       </li>
     {% endfor %}
   </ul>

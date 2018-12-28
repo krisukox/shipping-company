@@ -2,16 +2,16 @@
 
 {% block content %}
   <h1>Order List</h1>
-  {% if orderhistory_list %}
+  {% if ordershistory_list %}
   <ul>
-    {% for orderhistory in orderhistory_list %}
+    {% for ordershistory in ordershistory_list %}
       <li>
-        <a href="{{ OrderHistory.get_absolute_url }}"></a>
-          {{ OrderHistory.ID_zamowienia}}
-          {{ OrderHistory.account}}
-          {{ OrderHistory.service}}
-          {{ OrderHistory.startAddress}}
-          {{ OrderHistory.endAddress}}
+        <a href="{{ OrdersHistory.get_absolute_url }}"></a>
+          {{ ordershistory.ID_zamowienia}}
+          {{ ordershistory.account}}
+          {{ ordershistory.service}}
+          {{ ordershistory.startAddress}}
+          {{ ordershistory.endAddress}}
       </li>
     {% endfor %}
   </ul>
