@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Account List</h1>
+  {% if account_list %}
+<table>
+    <tr>
+    <th>id_konta</th>
+    <th>PESEL</th>
+    <th>imie</th>
+    <th>nazwisko</th>
+    <th>data_zalozenia_konta</th>
+  </tr>
+    {% for account in account_list %}
+        <tr>
+       <td> {{ account.ID_konta }}</td>
+       <td>{{account.PESEL}}</td>
+       <td>{{account.imie}}</td>
+        <td>{{account.nazwisko}}</td>
+        <td>{{account.data_zalozenia_konta}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p>There are no accounts yet.</p>
+  {% endif %}       
+{% endblock %}

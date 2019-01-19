@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Address List</h1>
+  {% if address_list %}
+  <ul>
+    {% for address in address_list %}
+      <li>
+        <a href="{{ Address.get_absolute_url }}"></a>
+          {{ address.ID_adresu}}
+          {{ address.miasto}}
+          {{ address.kod_pocztowy}}
+          {{ address.ulica}}
+          {{ address.nr_budynku}}
+          {{ address.nr_lokalu}}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no accounts yet.</p>
+  {% endif %}
+{% endblock %}

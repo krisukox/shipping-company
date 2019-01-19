@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1 page-header>Employees List</h1>
+  {% if employee_list %}
+  <ul>
+    {% for employee in employee_list %}
+      <li>
+        <a href="{{ Employee.get_absolute_url }}"></a>
+        {{ employee.account_id }}
+        {{ employee.stanowisko }}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no employees yet.</p>
+  {% endif %}
+{% endblock %}
