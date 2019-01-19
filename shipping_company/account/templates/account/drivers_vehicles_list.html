@@ -3,15 +3,17 @@
 {% block content %}
   <h1>Drivers_Vehicles List</h1>
   {% if drivers_vehicles_list %}
-  <ul>
+  <table>
+    <th>kierowca</th>
+    <th>pojazd</th>
     {% for Drivers_Vehicles in drivers_vehicles_list %}
-      <li>
+      <tr>
         <a href="{{ Drivers_Vehicles.get_absolute_url }}"></a>
-          {{ Drivers_Vehicles.kierowca}}
-          {{ Drivers_Vehicles.pojazd}}
-      </li>
+        <td>{{ Drivers_Vehicles.kierowca}}</td>
+        <td>{{ Drivers_Vehicles.pojazd}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no objects yet.</p>
   {% endif %}

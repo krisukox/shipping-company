@@ -3,15 +3,17 @@
 {% block content %}
   <h1 page-header>Employees List</h1>
   {% if employee_list %}
-  <ul>
+  <table>
+    <th>Account</th>
+    <th>stanowisko</th>
     {% for employee in employee_list %}
-      <li>
+      <tr>
         <a href="{{ Employee.get_absolute_url }}"></a>
-        {{ employee.account_id }}
-        {{ employee.stanowisko }}
-      </li>
+          <td>{{ employee.account }}</td>
+          <td>{{ employee.stanowisko }}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no employees yet.</p>
   {% endif %}

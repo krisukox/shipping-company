@@ -3,16 +3,19 @@
 {% block content %}
   <h1>Customer List</h1>
   {% if customer_list %}
-  <ul>
+  <table>
+    <th>Account</th>
+    <th>Address_id</th>
+    <th>NIP</th>
     {% for customer in customer_list %}
-      <li>
+      <tr>
         <a href="{{ Customer.get_absolute_url }}"></a>
-          (ID){{ customer.account}}
-          {{ customer.address}}
-          {{ customer.NIP}}
-      </li>
+        <td>{{ customer.account}}</td>
+        <td>{{ customer.address_id}}</td>
+        <td>{{ customer.NIP_id}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no customers yet.</p>
   {% endif %}
