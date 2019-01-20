@@ -1,14 +1,22 @@
 from django.db import models
 from django.urls import reverse
 import datetime
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User, UserManager
+from django.contrib.auth import get_user, get_user_model
 
 
 class Account(models.Model):
     ID_konta = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     PESEL = models.IntegerField(null=True)
     imie = models.CharField(max_length=40, blank=True)
     nazwisko = models.CharField(max_length=40, blank=True)
     data_zalozenia_konta = models.DateField(("Date"), default=datetime.date.today)
+
+    def delete(self, *args, **kwargs):
+        self.user.delete()
+        # return super(self.__class__, self).delete(*args, **kwargs)
 
     def __str__(self):
         return "ID konta = " + self.ID_konta.__str__() + '\n' + \
@@ -20,6 +28,9 @@ class Account(models.Model):
     def get_absolute_url(self):
 
         return reverse('account-detail', args=[str(self.id)])
+
+
+
 
 class Employee(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)
@@ -63,6 +74,15 @@ class Customer(models.Model):
 
     def get_absolute_url(self):
         return reverse('customer-detail', args=[str(self.id)])
+
+#
+# def create_customer_profile(sender, **kwargs):
+#     if kwargs['created']:
+#         customer_profile = Customer.objects.create(user)
+
+
+# post_save.connect(create_customer_profile, sender=Customer)
+
 
 class Driver(models.Model):
     ID_kierowcy = models.AutoField(primary_key=True)
@@ -154,25 +174,56 @@ class Drivers_Vehicles(models.Model):
 
 # Metody do account
 
-def add_account(PESEL = None, imie = '', nazwisko = ''):
+
+def add_account(PESEL=None, imie='', nazwisko='', username='', password=''):
     if PESEL and Account.objects.filter(PESEL=PESEL):
         return 'add account failed'
-    account = Account(PESEL=PESEL,imie = imie,nazwisko = nazwisko)
-    account.save()
-    return account
+    if username and password:
+        user = User.objects.create_user(username=username, password=password)
+        account = Account(PESEL=PESEL, imie=imie, nazwisko=nazwisko, user=user)
+        account.save()
+        return account
+    return False
 
 
-def delete_account(PESEL = None, imie = '', nazwisko = ''):
+def check_account(username=''):
+    resultUser = User.objects.all()
+    if username:
+        resultUser = resultUser.filter(username=username)
+        print(resultUser.count())
+        if resultUser.count() == 1:
+            user = resultUser[0]
+            account = Account.objects.get(user=user)
+            # print(account.__str__())
+            print(account.ID_konta)
+            if Employee.objects.all().filter(account_id=account.ID_konta):
+                return 'employee'
+            if Customer.objects.all().filter(account_id=account.ID_konta):
+                return 'customer'
+            if Driver.objects.all().filter(account_id=account.ID_konta):
+                return 'driver'
+        else:
+            return False
+
+    else:
+        return False
+
+
+def delete_account(PESEL = None, imie = '', nazwisko = '', username = ''):
     result = Account.objects.all()
+    resultUser = User.objects.all()
+    if username:
+        resultUser.filter(username=username)
 
+        return
     if PESEL:
         result = result.filter(PESEL=PESEL)
     if imie:
         result = result.filter(imie=imie)
     if nazwisko:
         result = result.filter(nazwisko=nazwisko)
-
-    result.delete()
+    for res in result:
+        res.delete()
 
 
 def get_account_id(imie,nazwisko):
@@ -180,8 +231,9 @@ def get_account_id(imie,nazwisko):
 
 # Metody do Employee
 
-def add_employee(stanowisko, pesel = None, imie = '', nazwisko = ''):
-    account = add_account(PESEL=pesel, imie=imie, nazwisko=nazwisko)
+
+def add_employee(stanowisko, pesel = None, imie = '', nazwisko = '', username='', password=''):
+    account = add_account(PESEL=pesel, imie=imie, nazwisko=nazwisko, username=username, password=password)
     if isinstance(account, Account):
         employee = Employee(account=account, stanowisko=stanowisko)
         employee.save()
@@ -241,9 +293,12 @@ def add_customer(nip=None,
                  kod_pocztowy=None,
                  ulica='',
                  nr_lokalu=None,
-                 nr_budynku=None):
-    account = add_account(PESEL=pesel,imie=imie,nazwisko=nazwisko)
-    if isinstance(account,Account):
+                 nr_budynku=None,
+                 username='',
+                 password=''):
+    account = add_account(PESEL=pesel,imie=imie,nazwisko=nazwisko, username=username, password=password)
+    if isinstance(account, Account):
+        print("JEEEEEST")
         address = add_address(miasto=miasto,
                           kod_pocztowy=kod_pocztowy,
                           ulica=ulica,
@@ -276,8 +331,8 @@ def delete_customer(nip=None, pesel = None, imie = '', nazwisko = ''):
 # Metody do Driver
 
 
-def add_driver(kat_prawa_jazdy, doswiadczenie, pesel = None, imie = '', nazwisko = ''):
-    account = add_account(PESEL=pesel, imie=imie, nazwisko=nazwisko)
+def add_driver(kat_prawa_jazdy, doswiadczenie, pesel = None, imie = '', nazwisko = '', username='', password=''):
+    account = add_account(PESEL=pesel, imie=imie, nazwisko=nazwisko, username=username, password=password)
     if isinstance(account, Account):
         driver = Driver(account=account, kat_prawa_jazdy=kat_prawa_jazdy, doswiadczenie=doswiadczenie)
         driver.save()
