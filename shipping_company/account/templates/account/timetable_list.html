@@ -3,18 +3,23 @@
 {% block content %}
   <h1>Timetable List</h1>
   {% if timetable_list %}
-  <ul>
+  <table>
+    <th>ID_terminu</th>
+    <th>data_pocz</th>
+    <th>data_kon</th>
+    <th>driver_id</th>
+    <th>service_id</th>
     {% for timetable in timetable_list %}
-      <li>
+      <tr>
         <a href="{{ Timetable.get_absolute_url }}"></a>
-          {{ timetable.ID_terminu}}
-          {{ timetable.data_pocz}}
-          {{ timetable.data_kon}}
-          {{ timetable.driver}}
-          {{ timetable.service}}
-      </li>
+          <td>{{ timetable.ID_terminu}}</td>
+          <td>{{ timetable.data_pocz}}</td>
+          <td>{{ timetable.data_kon}}</td>
+          <td>{{ timetable.driver_id}}</td>
+          <td>{{ timetable.service_id}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no Timetables yet.</p>
   {% endif %}

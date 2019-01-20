@@ -3,19 +3,25 @@
 {% block content %}
   <h1>Address List</h1>
   {% if address_list %}
-  <ul>
+  <table>
+    <th>ID_adresu</th>
+    <th>miasto</th>
+    <th>kod_pocztowy</th>
+    <th>ulica</th>
+    <th>nr_budynku</th>
+    <th>nr_lokalu</th>
     {% for address in address_list %}
-      <li>
+        <tr>
         <a href="{{ Address.get_absolute_url }}"></a>
-          {{ address.ID_adresu}}
-          {{ address.miasto}}
-          {{ address.kod_pocztowy}}
-          {{ address.ulica}}
-          {{ address.nr_budynku}}
-          {{ address.nr_lokalu}}
-      </li>
+         <td>{{ address.ID_adresu}}</td>
+          <td>{{ address.miasto}}</td>
+         <td> {{ address.kod_pocztowy}}</td>
+          <td>{{ address.ulica}}</td>
+          <td>{{ address.nr_budynku}}</td>
+          <td>{{ address.nr_lokalu}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no accounts yet.</p>
   {% endif %}

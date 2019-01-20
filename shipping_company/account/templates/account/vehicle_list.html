@@ -3,17 +3,21 @@
 {% block content %}
   <h1>Vehicle List</h1>
   {% if vehicle_list %}
-  <ul>
+    <table>
+    <th>Nr_rej</th>
+    <th>marka</th>
+    <th>model</th>
+    <th>atrybut</th>
     {% for vehicle in vehicle_list %}
-      <li>
+      <tr>
         <a href="{{ Vehicle.get_absolute_url }}"></a>
-          {{ vehicle.Nr_rej}}
-          {{ vehicle.marka}}
-          {{ vehicle.model}}
-          {{ vehicle.atrybut}}
-      </li>
+        <td>{{ vehicle.Nr_rej}}</td>
+          <td>{{ vehicle.marka}}</td>
+          <td>{{ vehicle.model}}</td>
+          <td>{{ vehicle.atrybut}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+    </table>
   {% else %}
     <p>There are no vehicles yet.</p>
   {% endif %}

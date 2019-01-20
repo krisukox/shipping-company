@@ -3,17 +3,21 @@
 {% block content %}
   <h1>Driver List</h1>
   {% if driver_list %}
-  <ul>
+  <table>
+    <th>ID_kierowcy</th>
+    <th>Account</th>
+    <th>kat_prawa_jazdy</th>
+    <th>doswiadczenie</th>
     {% for driver in driver_list %}
-      <li>
+      <tr>
         <a href="{{ Driver.get_absolute_url }}"></a>
-          {{ driver.ID_kierowcy}}
-          {{ driver.account}}
-          {{ driver.kat_prawa_jazdy}}
-          {{ driver.doswiadczenie}}
-      </li>
+          <td>{{ driver.ID_kierowcy}}</td>
+        <td>{{ driver.account}}</td>
+        <td>{{ driver.kat_prawa_jazdy}}</td>
+        <td>{{ driver.doswiadczenie}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no drivers yet.</p>
   {% endif %}

@@ -3,18 +3,23 @@
 {% block content %}
   <h1>Order List</h1>
   {% if ordershistory_list %}
-  <ul>
+  <table>
+    <th>ID_zamowienia</th>
+    <th>account_id</th>
+    <th>service_id</th>
+    <th>startAddress_id</th>
+    <th>endAddress_id</th>
     {% for ordershistory in ordershistory_list %}
-      <li>
+      <tr>
         <a href="{{ OrdersHistory.get_absolute_url }}"></a>
-          {{ ordershistory.ID_zamowienia}}
-          {{ ordershistory.account}}
-          {{ ordershistory.service}}
-          {{ ordershistory.startAddress}}
-          {{ ordershistory.endAddress}}
-      </li>
+        <td>{{ ordershistory.ID_zamowienia}}</td>
+        <td>  {{ ordershistory.account_id}}</td>
+         <td>  {{ ordershistory.service_id}}</td>
+          <td> {{ ordershistory.startAddress_id}}</td>
+         <td>  {{ ordershistory.endAddress_id}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no orders yet.</p>
   {% endif %}

@@ -3,16 +3,19 @@
 {% block content %}
   <h1>Service List</h1>
   {% if service_list %}
-  <ul>
+  <table>
+    <th>ID_uslugi</th>
+    <th>opis_uslugi</th>
+    <th>koszt</th>
     {% for service in service_list %}
-      <li>
+      <tr>
         <a href="{{ Customer.get_absolute_url }}"></a>
-          (ID){{ service.ID_uslugi}}
-          {{ service.opis_uslugi}}
-          {{ service.koszt}}
-      </li>
+        <td>{{ service.ID_uslugi}}</td>
+          <td> {{ service.opis_uslugi}}</td>
+           <td>{{ service.koszt}}</td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>There are no services yet.</p>
   {% endif %}
