@@ -19,7 +19,7 @@ class Account(models.Model):
 
     def get_absolute_url(self):
 
-        return reverse('account-detail', args=[str(self.id)])
+        return reverse('home')
 
 class Employee(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)

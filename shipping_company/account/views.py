@@ -1,7 +1,30 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Account,Employee,Address,Customer,Driver,Service,OrdersHistory,Vehicle,Timetable,Drivers_Vehicles
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from django.views import generic
+from django.shortcuts import get_object_or_404
+
+class AccountCreate(CreateView):
+    info_sended = False
+    model = Account
+    fields = '__all__'
+
+class AccountDelete(DeleteView):
+    model = Account
+    success_url = reverse_lazy('accounts')
+
+class AccountUpdate(UpdateView):
+    model = Account
+    fields = ['imie', 'nazwisko']
+
+class AccountDetailView(generic.DetailView):
+    model = Account
+
+def account_detail_view(request, primary_key):
+    account = get_object_or_404(Account, pk=primary_key)
+    return render(request, 'account/account_detail.html', context={'account': account})
 
 class AccountListView(generic.ListView):
     model = Account
@@ -36,6 +59,9 @@ class VehicleListView(generic.ListView):
 
 class Drivers_VehiclesListView(generic.ListView):
     model = Drivers_Vehicles
+
+
+
 
 def home(request):
 
