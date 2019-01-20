@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<!--<contents>-->
+<body>
+<div class="container">
+<h1>REGISTER</h1>
+<h2>register</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+    <!--<input type="button" value="Register" onclick=""-->
+</form>
+</div>
+</body>
+<!--</contents>-->

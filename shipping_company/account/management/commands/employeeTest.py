@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from account.models import Account, Address, Employee, Customer
-from account.models import add_account, delete_account, add_employee, delete_employee, get_account_id
+from account.models import add_account, delete_account, add_employee, delete_employee, get_account_id, check_account
 
 class Command(BaseCommand):
     help = 'Simple database test'
@@ -10,30 +10,33 @@ class Command(BaseCommand):
             print(x)
 
     def handle(self, *args, **kwargs):
-        add_employee(imie='Jan', nazwisko='Kowalski', stanowisko = 'sprzedawca')
-        add_employee(imie='Tomasz', nazwisko='Nowak', stanowisko = 'kierownik')
-        add_employee(stanowisko='manager')
-        print("dodanie poczatkowe konta oraz pracownik")
+        add_employee(imie='Jan', nazwisko='Kowalski', stanowisko = 'sprzedawca', username='user4',
+                     password='adminadmin')
+        # add_employee(imie='Tomasz', nazwisko='Nowak', stanowisko = 'kierownik')
+        # add_employee(stanowisko='manager')
+        # print("dodanie poczatkowe konta oraz pracownik")
         print("\n"+"ACCOUNTS -> ")
         self.display(Account.objects)
         print("EMPLOYEES -> ")
         self.display(Employee.objects)
 
-        delete_employee(stanowisko='manager')
+        check_account(username='user4')
 
-        print("\n"+"ACCOUNTS -> ")
-        self.display(Account.objects)
-        print("EMPLOYEES -> ")
-        self.display(Employee.objects)
+        # delete_employee(stanowisko='manager')
 
-        delete_account(nazwisko='Nowak')
+        # print("\n"+"ACCOUNTS -> ")
+        # self.display(Account.objects)
+        # print("EMPLOYEES -> ")
+        # self.display(Employee.objects)
 
-        print("\n"+"ACCOUNTS -> ")
-        self.display(Account.objects)
-        print("EMPLOYEES -> ")
-        self. display(Employee.objects)
+        delete_account(nazwisko='Kowalski')
 
-        delete_employee(imie='Jan')
+        # print("\n"+"ACCOUNTS -> ")
+        # self.display(Account.objects)
+        # print("EMPLOYEES -> ")
+        # self. display(Employee.objects)
+
+        # delete_employee(imie='Jan')
 
         print("\n"+"ACCOUNTS -> ")
         self.display(Account.objects)

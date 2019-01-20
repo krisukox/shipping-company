@@ -11,3 +11,7 @@ urlpatterns = [
    path('',RedirectView.as_view(url='/account/', permanent=True)),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns += [
+    path('account/', include('django.contrib.auth.urls')),
+]   

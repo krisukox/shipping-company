@@ -1,16 +1,23 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Account,Employee,Address,Customer,Driver,Service,OrdersHistory,Vehicle,Timetable,Drivers_Vehicles
 from django.views import generic
+from django.contrib.auth.forms import UserCreationForm
+from .forms import UpdateAccountForm, RegisterForm
+from .models import add_account, check_account, add_customer
+
 
 class AccountListView(generic.ListView):
     model = Account
 
+
 class EmployeeListView(generic.ListView):
     model = Employee
 
+
 class AddressListView(generic.ListView):
     model = Address
+
 
 class CustomerListView(generic.ListView):
     model = Customer
@@ -31,11 +38,48 @@ class OrdersHistoryListView(generic.ListView):
 class TimetableListView(generic.ListView):
     model = Timetable
 
+
 class VehicleListView(generic.ListView):
     model = Vehicle
 
+
 class Drivers_VehiclesListView(generic.ListView):
     model = Drivers_Vehicles
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            pesel = form.cleaned_data['PESEL']
+
+            add_customer(pesel=pesel,
+                         password=form.cleaned_data['password1'],
+                         username=form.cleaned_data['username'])
+
+            print(pesel)
+
+            return render(request, 'registration/success_register.html')
+
+    form = RegisterForm()
+    args = {'form': form}
+    return render(request, 'registration/register.html', args)
+
+
+def profile(request):
+    args = {'user': request.user}
+    if request.user.is_staff:
+        return render(request, 'registration/profile_admin.html', args)
+    account_type = check_account(request.user)
+    if account_type:
+        if account_type == 'customer':
+            return render(request, 'registration/profile_customer.html', args)
+        if account_type == 'employee':
+            return render(request, 'registration/profile_employee.html', args)
+        if account_type == 'driver':
+            return render(request, 'registration/profile_driver.html', args)
+    else:
+        return render(request, 'registration/login.html', args)
 
 def home(request):
 
@@ -63,6 +107,6 @@ def home(request):
         'num_drivers_vehicles': num_drivers_vehicles
     }
 
-    return render(request,'home.html',context=context)
+    return render(request, 'home.html', context=context)
 
 
