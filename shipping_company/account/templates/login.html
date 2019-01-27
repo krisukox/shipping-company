@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<!--<contents>-->
+<body>
+<div class="container">
+<h1>Welcome</h1>
+<h2>Login</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+    <button><a href="{% url 'register' %}">Register</a></button>
+</form>
+</div>
+</body>
+<!--</contents>-->

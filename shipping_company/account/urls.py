@@ -2,6 +2,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 from. import views
+from django.contrib.auth import views as pom_view
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('',views.home, name='home'),
@@ -19,5 +21,7 @@ urlpatterns = [
     path('create/', views.AccountCreate.as_view(), name='account_create'),
     path('account/<int:pk>/delete/', views.AccountDelete.as_view(), name='account_delete'),
     path('account/<int:pk>/update/', views.AccountUpdate.as_view(), name='account_update'),
-
+    # url(r'^login/', pom_view.LoginView.as_view(template_name='login.html')),
+    url(r'^register/', views.register, name='register'),
+    url(r'^profile/$', views.profile, name='profile')
 ]

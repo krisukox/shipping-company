@@ -10,19 +10,23 @@ class Command(BaseCommand):
             print(x)
 
     def handle(self, *args, **kwargs):
+
+
+        # print("TAK")
         delete_account()
         delete_address()
-        add_customer(pesel=123, nip=333, miasto='Wroclaw', imie='Jan', nazwisko='Kowalski')
-
+        add_customer(pesel=123, nip=333, miasto='Wroclaw', imie='Jan', nazwisko='Kowalski',
+                     username='kris', password='adminadmin')
+        #
         print("\n"+"ACCOUNTS -> ")
         self.display(Account.objects)
         print("CUSTOMER -> ")
         self.display(Customer.objects)
         print("ADDRESS -> ")
         self.display(Address.objects)
-
-        delete_customer(nip=333,pesel=123, imie='Jan')
-
+        delete_account(PESEL=123)
+        # delete_customer(nip=333,pesel=123, imie='Jan')
+        #
         print("\n" + "ACCOUNTS -> ")
         self.display(Account.objects)
         print("CUSTOMER -> ")
