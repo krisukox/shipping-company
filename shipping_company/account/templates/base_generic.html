@@ -20,6 +20,7 @@
     <div class="row content">
       <div class="col-sm-2">
       {% block sidebar %}
+      {% if user.is_authenticated %}
         <ul class="sidebar-nav list-group" >
           <li class="list-group-item list-group-item-action"><a href="{% url 'home' %}">Home</a></li>
           <li class="list-group-item list-group-item-action"><a href="{% url 'accounts' %}">All accounts</a></li>
@@ -33,7 +34,13 @@
           <li class="list-group-item list-group-item-action"><a href="{% url 'driversvehicles' %}">All drivers_vehicles</a></li>
           <li class="list-group-item list-group-item-action"><a href="{% url 'timetables' %}">All timetables</a></li>
         </ul>
+     {% else %}
+        <ul class="sidebar-nav list-group" >
+          <li class="list-group-item list-group-item-action"><a href="{% url 'timetables' %}">zabezpieczone konta</a></li>
+        </ul>
+     {% endif %}
      {% endblock %}
+
       </div>
       <div class="col-sm-10 counts">{% block content %}{% endblock %}</div>
     </div>
