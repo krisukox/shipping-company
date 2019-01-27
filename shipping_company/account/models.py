@@ -16,7 +16,7 @@ class Account(models.Model):
 
     def delete(self, *args, **kwargs):
         self.user.delete()
-        # return super(self.__class__, self).delete(*args, **kwargs)
+        return super(self.__class__, self).delete(*args, **kwargs)
 
     def __str__(self):
         return "ID konta = " + self.ID_konta.__str__() + '\n' + \
@@ -439,7 +439,9 @@ def add_timetable(data_pocz=datetime.date.today(),data_kon=datetime.date.today()
                   pesel=None,imie='',nazwisko='',
                   kat_prawa_jazdy='C', doswiadczenie=10,
                   opis_uslugi='',koszt=None):
+
     driver = add_driver(pesel=pesel,imie=imie,nazwisko=nazwisko, kat_prawa_jazdy=kat_prawa_jazdy,doswiadczenie=doswiadczenie)
+    # driver = Driver.objects.get()
     service = add_service(opis_uslugi=opis_uslugi,koszt=koszt)
     if isinstance(driver, Driver):
         if isinstance(service, Service):
