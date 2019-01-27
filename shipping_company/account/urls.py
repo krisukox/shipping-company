@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('',views.home, name='home'),
     path('accounts/',views.AccountListView.as_view(), name='accounts'),
+    path('accounts/<int:pk>', views.AccountDetailView.as_view(), name='account-detail'),
     path('employees/',views.EmployeeListView.as_view(), name='employees'),
     path('addresses/', views.AddressListView.as_view(),name='addresses'),
     path('customers/',views.CustomerListView.as_view(),name='customers'),
@@ -17,6 +18,9 @@ urlpatterns = [
     path('timetables/',views.TimetableListView.as_view(),name='timetables'),
     path('vehicles/',views.VehicleListView.as_view(),name='vehicles'),
     path('driversvehicles/',views.Drivers_VehiclesListView.as_view(),name='driversvehicles'),
+    path('create/', views.AccountCreate.as_view(), name='account_create'),
+    path('account/<int:pk>/delete/', views.AccountDelete.as_view(), name='account_delete'),
+    path('account/<int:pk>/update/', views.AccountUpdate.as_view(), name='account_update'),
     # url(r'^login/', pom_view.LoginView.as_view(template_name='login.html')),
     url(r'^register/', views.register, name='register'),
     url(r'^profile/$', views.profile, name='profile')

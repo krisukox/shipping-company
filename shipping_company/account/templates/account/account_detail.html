@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Title: {{ account.ID_KONTA }}</h1>
+
+  <p><strong>Author:</strong> <a href="">{{ account.ID_konta }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>Summary:</strong> {{ account.PESEL }}</p>
+  <p><strong>ISBN:</strong> {{ account.imie }}</p>
+  <p><strong>Language:</strong> {{ account.nazwisko }}</p>
+  <p><strong>Language:</strong> {{ account.data_zalozenia_konta }}</p>
+
+{% endblock %}
