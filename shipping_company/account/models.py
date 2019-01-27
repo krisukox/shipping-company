@@ -65,7 +65,7 @@ class Address(models.Model):
 class Customer(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, blank=True, null=True)
-    NIP = models.IntegerField(blank=True)
+    NIP = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return "ID_konta = " + self.account_id.__str__() + '\n' + \
