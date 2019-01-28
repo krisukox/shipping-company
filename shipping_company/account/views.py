@@ -15,6 +15,34 @@ from django.contrib.auth import views as pom_view
 
 
 
+class TimetableCreate(CreateView):
+    info_sended = False
+    model = Timetable
+    fields = '__all__'
+
+class TimetableDelete(DeleteView):
+    model = Timetable
+    success_url = reverse_lazy('timetables')
+
+
+class TimetableUpdate(UpdateView):
+    model = Timetable
+    fields = ['data_pocz', 'data_kon','driver','service']
+
+class OrdersHistoryCreate(CreateView):
+    info_sended = False
+    model = OrdersHistory
+    fields = '__all__'
+
+class OrdersHistoryDelete(DeleteView):
+    model = OrdersHistory
+    success_url = reverse_lazy('orderhistories')
+
+
+class OrdersHistoryUpdate(UpdateView):
+    model = OrdersHistory
+    fields = ['account', 'service','startAddress','endAddress']
+
 class AccountCreate(CreateView):
     info_sended = False
     model = Account

@@ -159,7 +159,7 @@ class Timetable(models.Model):
                     "ID_zamowienia " + self.service_id.__str__() + '\n'
 
     def get_absolute_url(self):
-        return reverse('timetable-detail', args=[str(self.id)])
+        return reverse('timetables')
 
 class Drivers_Vehicles(models.Model):
     kierowca = models.OneToOneField(Driver, on_delete=models.CASCADE, null=True)
