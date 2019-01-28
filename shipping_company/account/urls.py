@@ -31,5 +31,11 @@ urlpatterns = [
     url(r'^driverregister/', views.driver_register, name='driver_register'),
     url(r'^employeeregister/', views.employee_register, name='employee_register'),
     url(r'^register/', views.register, name='register'),
-    url(r'^profile/$', views.profile, name='profile')
+    url(r'^profile/$', views.profile, name='profile'),
+    path('timetables/create/', views.TimetableCreate.as_view(), name='timetable_create'),
+    path('timetables/<int:pk>/update/', views.TimetableUpdate.as_view(), name='timetable_update'),
+    path('timetables/<int:pk>/delete/', views.TimetableDelete.as_view(), name='timetable_delete'),
+    path('ordershistories/create/', views.OrdersHistoryCreate.as_view(), name='ordershistory_create'),
+    path('ordershistories/<int:pk>/update/', views.OrdersHistoryUpdate.as_view(), name='ordershistory_update'),
+    path('ordershistories/<int:pk>/delete/', views.OrdersHistoryDelete.as_view(), name='ordershistory_delete')
 ]

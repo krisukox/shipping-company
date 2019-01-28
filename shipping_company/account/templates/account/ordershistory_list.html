@@ -4,6 +4,8 @@
   <h1>Order List</h1>
   {% if ordershistory_list %}
   <table>
+    <th>Delete</th>
+    <th>Edit</th>
     <th>ID_zamowienia</th>
     <th>account_id</th>
     <th>service_id</th>
@@ -11,7 +13,8 @@
     <th>endAddress_id</th>
     {% for ordershistory in ordershistory_list %}
       <tr>
-        <a href="{{ OrdersHistory.get_absolute_url }}"></a>
+         <td><a href="http://127.0.0.1:8000/account/ordershistories/{{ ordershistory.ID_zamowienia}}/delete"><button>Delete</button></a></td>
+        <td><a href="http://127.0.0.1:8000/account/ordershistories/{{ ordershistory.ID_zamowienia}}/update"><button>Edit</button></a></td>
         <td>{{ ordershistory.ID_zamowienia}}</td>
         <td>  {{ ordershistory.account_id}}</td>
          <td>  {{ ordershistory.service_id}}</td>

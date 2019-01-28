@@ -22,7 +22,7 @@ class Command(BaseCommand):
         self.display(Service.objects)
 
         #delete_service(opis_uslugi='12345', koszt=999)
-        delete_service(koszt=1999)
+        #delete_service(koszt=1999)
         #delete_service(opis_uslugi='000', koszt=222)
         print("\n" + "Service -> ")
         self.display(Service.objects)
